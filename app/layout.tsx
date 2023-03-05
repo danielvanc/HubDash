@@ -1,8 +1,8 @@
 import "server-only";
 import "@/tailwind.css";
-import { createClient } from "lib/supabase/server";
 import SupabaseProvider from "../components/providers/supabase";
 import SupaWatcher from "lib/supabase/watcher";
+import { getSession } from "lib/auth/supabase";
 
 export const revalidate = 0;
 
@@ -11,10 +11,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const session = await getSession();
 
   return (
     <html lang="en">
