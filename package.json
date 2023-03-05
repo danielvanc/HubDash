@@ -10,6 +10,8 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@octokit/plugin-throttling": "^5.0.1",
+    "@octokit/rest": "^19.0.7",
     "@supabase/auth-helpers-nextjs": "^0.5.5",
     "client-only": "^0.0.1",
     "eslint": "^8.34.0",
