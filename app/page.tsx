@@ -1,6 +1,6 @@
 import "server-only";
 import * as React from "react";
-import Login from "components/providers/Login";
+import Login from "@/components/Login";
 import { getSession } from "lib/auth/supabase";
 
 export const revalidate = 0;

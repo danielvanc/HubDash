@@ -8,9 +8,15 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   moduleDirectories: ["node_modules", "<rootDir>/"],
   moduleNameMapper: {
-    "@/(.*)$": "<rootDir>/app/$1",
+    "^@/components/(.*)$": "<rootDir>/components/$1",
   },
-  testEnvironment: "jest-environment-jsdom",
+  // testEnvironment: "jest-environment-jsdom",
+  testEnvironment: "@happy-dom/jest-environment",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  watchPlugins: [
+    "jest-watch-typeahead/filename",
+    "jest-watch-typeahead/testname",
+  ],
 };
 
 module.exports = createJestConfig(customJestConfig);
