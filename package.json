@@ -7,7 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "start:mocks": "cross-env NODE_ENV=production node --require ./mocks",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "test:e2e:dev": "cross-env RUNNING_E2E=true ENABLE_TEST_ROUTES=true start-server-and-test dev http-get://localhost:3000 cy:open",
+    "test:e2e:run": "cross-env RUNNING_E2E=true PORT=8811 start-server-and-test start:mocks http-get://localhost:8811/build/info.json cy:run"
   },
   "dependencies": {
     "@octokit/plugin-throttling": "^5.0.1",
@@ -15,6 +20,7 @@
     "@prisma/client": "^4.11.0",
     "@supabase/auth-helpers-nextjs": "^0.5.5",
     "client-only": "^0.0.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.2.0",
     "next": "^13.2.3",
@@ -33,11 +39,13 @@
     "@types/node": "^18.14.1",
     "@types/react": "^18.0.28",
     "autoprefixer": "^10.4.13",
+    "cypress": "^12.7.0",
     "jest": "^29.4.3",
     "jest-environment-jsdom": "^29.4.3",
     "jest-watch-typeahead": "^2.2.2",
     "postcss": "^8.4.21",
     "prisma": "^4.11.0",
+    "start-server-and-test": "^2.0.0",
     "tailwindcss": "^3.2.7"
   }
 }
