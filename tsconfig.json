@@ -6,6 +6,7 @@
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["vitest/globals"],
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -18,7 +19,8 @@
     "paths": {
       "@/*": ["/*"],
       "@/components/*": ["./components/*"],
-      "@/public/*": ["./public/*"]
+      "@/public/*": ["./public/*"],
+      "tests/*": ["./tests/*"]
     },
     "plugins": [
       {
