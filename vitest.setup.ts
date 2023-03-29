@@ -1,8 +1,8 @@
-// import { setupServer } from "msw/node";
+import { setupServer } from "msw/node";
 import matchers, {
   type TestingLibraryMatchers,
 } from "@testing-library/jest-dom/matchers";
-// import { handlers } from "tests/mocks/handlers";
+import { handlers } from "tests/mocks/handlers";
 
 declare global {
   namespace Vi {
@@ -14,11 +14,11 @@ declare global {
 
 expect.extend(matchers);
 
-// const server = setupServer(...handlers);
+const server = setupServer(...handlers);
 
-// console.info("🔶 Mock server running");
+console.info("🔶 Mock server running");
 
-// server.listen();
+server.listen();
 
-// process.once("SIGINT", () => server.close());
-// process.once("SIGTERM", () => server.close());
+process.once("SIGINT", () => server.close());
+process.once("SIGTERM", () => server.close());
