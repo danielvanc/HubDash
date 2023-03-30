@@ -1,6 +1,6 @@
 import "server-only";
 import "./tailwind.css";
-import SupabaseProvider from "../components/providers/supabase";
+import SupabaseProvider from "lib/contexts/supabase";
 import SupaWatcher from "lib/supabase/watcher";
 import { getSession } from "lib/auth/supabase";
 

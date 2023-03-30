@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useSupabase } from "components/providers/supabase";
+import { useSupabase } from "lib/contexts/supabase";
 import { useRouter } from "next/navigation";
 
 export default function SupaWatcher({

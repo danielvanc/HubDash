@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import { createClient } from "lib/supabase/client";
+import { useSupabase } from "../lib/contexts/supabase";
 
 export default function Login() {
-  const supabase = createClient();
+  const { supabase } = useSupabase();
 
   async function signInWithGitHub() {
     const { data, error } = await supabase.auth.signInWithOAuth({
