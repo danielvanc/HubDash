@@ -4,6 +4,7 @@ import SupabaseProvider from "lib/contexts/supabase";
 import { getSession } from "lib/auth/supabase";
 import CONFIG from "lib/config.json";
 import "@/app/tailwind.css";
+import Header from "@/components/admin/UI/Header";
 
 export const revalidate = 0;
 
@@ -20,7 +21,10 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <SupabaseProvider serverAccessToken={session?.access_token}>
-          {children}
+          <div className="min-h-full">
+            <Header />
+            {children}
+          </div>
         </SupabaseProvider>
       </body>
     </html>
