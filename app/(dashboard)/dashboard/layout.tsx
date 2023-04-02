@@ -6,7 +6,7 @@ import CONFIG from "lib/config.json";
 import "@/app/tailwind.css";
 import Header from "@/components/admin/UI/Header";
 
-export const revalidate = 0;
+export const revalidate = 120;
 
 export default async function RootLayout({
   children,
