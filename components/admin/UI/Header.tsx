@@ -1,46 +1,47 @@
 "use client";
+import React from "react";
+import Image from "next/image";
+import { useSelectedLayoutSegment } from "next/navigation";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { UserMetadata } from "@supabase/gotrue-js";
 import { useSupabase } from "@/lib/contexts/supabase";
 import { classNames } from "lib/utils";
-import React from "react";
-
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
-
-const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Repositories", href: "#", current: false },
-  { name: "People", href: "#", current: false },
-  { name: "Organisations", href: "#", current: false },
-  { name: "My Inbox", href: "#", current: false },
-];
+import navigation from "navData/primary";
 
 export default function Header() {
   const { supabase } = useSupabase();
+  const [user, setUser] = React.useState<UserMetadata | undefined>();
+
+  const segment = useSelectedLayoutSegment();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
   };
 
+  const title =
+    navigation.filter((page) => page.short === segment)?.shift()?.name ||
+    "Dashboard";
+
+  React.useEffect(() => {
+    async function getUser() {
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user?.user_metadata);
+    }
+
+    if (!user) getUser();
+  }, [supabase.auth, user]);
+
   return (
     <>
-      <Disclosure as="nav" className="bg-gray-800">
+      <Disclosure as="nav" className="bg-gray-900">
         {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <img
-                      className="h-8 w-8"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                      alt="Your Company"
-                    />
+                    {/* TODO: add 32x32 logo */}
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
@@ -49,9 +50,9 @@ export default function Header() {
                           key={item.name}
                           href={item.href}
                           className={classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            item.current === segment
+                              ? "bg-gray-800 text-white"
+                              : "text-gray-300 hover:bg-gray-800 hover:text-white",
                             "rounded-md px-3 py-2 text-sm font-medium"
                           )}
                           aria-current={item.current ? "page" : undefined}
@@ -66,7 +67,7 @@ export default function Header() {
                   <div className="ml-4 flex items-center md:ml-6">
                     <button
                       type="button"
-                      className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                      className="rounded-full bg-gray-900 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900"
                     >
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -75,13 +76,17 @@ export default function Header() {
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-3">
                       <div>
-                        <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                        <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900">
                           <span className="sr-only">Open user menu</span>
-                          <img
-                            className="h-8 w-8 rounded-full"
-                            src={user.imageUrl}
-                            alt=""
-                          />
+                          {user?.avatar_url ? (
+                            <Image
+                              className="h-8 w-8 rounded-full"
+                              src={user.avatar_url}
+                              alt=""
+                              height={32}
+                              width={32}
+                            />
+                          ) : null}
                         </Menu.Button>
                       </div>
                       <Transition
@@ -94,7 +99,7 @@ export default function Header() {
                         leaveTo="transform opacity-0 scale-95"
                       >
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          {({ active }) => (
+                          {() => (
                             <>
                               <Menu.Item
                                 key="Settings"
@@ -153,18 +158,22 @@ export default function Header() {
               <div className="border-t border-gray-700 pb-3 pt-4">
                 <div className="flex items-center px-5">
                   <div className="flex-shrink-0">
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src={user.imageUrl}
-                      alt=""
-                    />
+                    {user?.avatar_url ? (
+                      <Image
+                        className="h-10 w-10 rounded-full"
+                        src={user.avatar_url || ""}
+                        alt=""
+                        height={40}
+                        width={40}
+                      />
+                    ) : null}
                   </div>
                   <div className="ml-3">
                     <div className="text-base font-medium leading-none text-white">
-                      {user.name}
+                      {user?.name}
                     </div>
                     <div className="text-sm font-medium leading-none text-gray-400">
-                      {user.email}
+                      {user?.email}
                     </div>
                   </div>
                   <button
@@ -184,7 +193,11 @@ export default function Header() {
                   >
                     Settings
                   </Disclosure.Button>
-                  <Disclosure.Button onClick={handleLogout} type="button">
+                  <Disclosure.Button
+                    onClick={handleLogout}
+                    type="button"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                  >
                     Logout
                   </Disclosure.Button>
                 </div>
@@ -194,12 +207,10 @@ export default function Header() {
         )}
       </Disclosure>
 
-      <header className="bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:px-[6.5rem] lg:px-28">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Dashboard
-          </h1>
-        </div>
+      <header className="bg-white shadow container">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          {title}
+        </h1>
       </header>
     </>
   );

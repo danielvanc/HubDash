@@ -21,6 +21,7 @@
       "@/lib/*": ["./lib/*"],
       "@/components/*": ["./components/*"],
       "@/public/*": ["./public/*"],
+      "navData/*": ["navData/*"],
       "tests/*": ["./tests/*"]
     },
     "plugins": [
