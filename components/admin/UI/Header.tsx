@@ -9,28 +9,18 @@ import { useSupabase } from "@/lib/contexts/supabase";
 import { classNames } from "lib/utils";
 import navigation from "navData/primary";
 
-export default function Header() {
+export default function Header({ user }: { user: UserMetadata }) {
   const { supabase } = useSupabase();
-  const [user, setUser] = React.useState<UserMetadata | undefined>();
 
   const segment = useSelectedLayoutSegment();
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+    await supabase.auth.signOut();
   };
 
   const title =
     navigation.filter((page) => page.short === segment)?.shift()?.name ||
     "Dashboard";
-
-  React.useEffect(() => {
-    async function getUser() {
-      const { data } = await supabase.auth.getUser();
-      setUser(data?.user?.user_metadata);
-    }
-
-    if (!user) getUser();
-  }, [supabase.auth, user]);
 
   return (
     <>
