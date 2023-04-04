@@ -31,7 +31,12 @@ export default function Header({ user }: { user: UserMetadata }) {
               <div className="flex h-16 items-center justify-between">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    {/* TODO: add 32x32 logo */}
+                    <Image
+                      src="/logo.svg"
+                      alt="HubDash logo"
+                      width={32}
+                      height={32}
+                    />
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
@@ -197,10 +202,12 @@ export default function Header({ user }: { user: UserMetadata }) {
         )}
       </Disclosure>
 
-      <header className="bg-white shadow container">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-          {title}
-        </h1>
+      <header className="bg-white shadow">
+        <div className="container">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            {title}
+          </h1>
+        </div>
       </header>
     </>
   );
