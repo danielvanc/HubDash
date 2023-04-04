@@ -22,7 +22,7 @@ export default async function RootLayout({
       <body>
         <SupabaseProvider serverAccessToken={session?.access_token}>
           <div className="min-h-full">
-            <Header />
+            <Header user={session?.user?.user_metadata} />
             {children}
           </div>
         </SupabaseProvider>
