@@ -2,6 +2,7 @@
 import type { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import * as React from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 
 type SupabaseContext = {
   supabase: SupabaseClient;
@@ -9,12 +10,29 @@ type SupabaseContext = {
 
 const Context = React.createContext<SupabaseContext | undefined>(undefined);
 
-export default function SupabaseProvider({
+export default function SupaProvider({
+  serverAccessToken,
   children,
 }: {
+  serverAccessToken?: string;
   children: React.ReactNode;
 }) {
-  const [supabase] = React.useState(() => createBrowserSupabaseClient());
+  const supabase = createBrowserSupabaseClient();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.access_token !== serverAccessToken) {
+        router.refresh();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [serverAccessToken, router, supabase]);
 
   return (
     <Context.Provider value={{ supabase }}>
