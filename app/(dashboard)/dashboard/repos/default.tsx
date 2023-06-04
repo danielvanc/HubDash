@@ -4,7 +4,7 @@ import { getLatestReleases } from "@/lib/auth/github";
 
 // export const revalidate = 0;
 
-export default async function ReleasesPage() {
+export default async function DefaultReleasesPage() {
   const releases = await getLatestReleases();
 
   return (
