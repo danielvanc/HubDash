@@ -1,21 +1,22 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { UserMetadata } from "@supabase/gotrue-js";
-import { useSupabase } from "@/lib/contexts/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { classNames } from "lib/utils";
 import navigation from "navData/primary";
 
 export default function Header({ user }: { user: UserMetadata }) {
-  const { supabase } = useSupabase();
-
+  const supabase = createClientComponentClient();
   const segment = useSelectedLayoutSegment();
+  const router = useRouter();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    router.refresh();
   };
 
   const title =

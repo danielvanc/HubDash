@@ -1,23 +1,27 @@
 import "server-only";
-import "@/app/tailwind.css";
-import SupabaseProvider from "lib/contexts/supabase";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { hasSession } from "lib/auth/supabase";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import CONFIG from "lib/config.json";
-
-export const revalidate = 0;
+import "@/app/tailwind.css";
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  if (await hasSession()) redirect(CONFIG.LOGGED_IN);
+  const supabase = createServerComponentClient({ cookies });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) redirect(CONFIG.LOGGED_IN);
 
   return (
     <html lang="en">
       <body>
-        <SupabaseProvider>{children}</SupabaseProvider>
+        <>{children}</>
       </body>
     </html>
   );

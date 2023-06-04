@@ -1,31 +1,33 @@
 import "server-only";
 import { redirect } from "next/navigation";
-import SupabaseProvider from "lib/contexts/supabase";
-import { getSession } from "lib/auth/supabase";
+import { cookies } from "next/headers";
+import { UserMetadata } from "@supabase/gotrue-js";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import CONFIG from "lib/config.json";
-import "@/app/tailwind.css";
 import Header from "@/components/admin/UI/Header";
-
-export const revalidate = 0;
+import "@/app/tailwind.css";
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
+  const supabase = createServerComponentClient({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  if (!session?.access_token) redirect(CONFIG.LOGGED_OUT);
+  if (!session) redirect(CONFIG.LOGGED_OUT);
+
+  const user = session?.user?.user_metadata as UserMetadata;
 
   return (
     <html lang="en">
       <body>
-        <SupabaseProvider serverAccessToken={session?.access_token}>
-          <div className="min-h-full">
-            <Header user={session?.user?.user_metadata} />
-            {children}
-          </div>
-        </SupabaseProvider>
+        <div className="min-h-full">
+          <Header user={user} />
+          {children}
+        </div>
       </body>
     </html>
   );
