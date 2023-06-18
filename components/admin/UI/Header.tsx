@@ -1,23 +1,21 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { UserMetadata } from "@supabase/gotrue-js";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { classNames } from "lib/utils";
 import navigation from "navData/primary";
 
-export default function Header({ user }: { user: UserMetadata }) {
-  const supabase = createClientComponentClient();
+export default function Header({
+  user,
+  signOut,
+}: {
+  user: UserMetadata;
+  signOut?: (formData: FormData) => void;
+}) {
   const segment = useSelectedLayoutSegment();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
 
   const title =
     navigation.filter((page) => page.short === segment)?.shift()?.name ||
@@ -104,13 +102,15 @@ export default function Header({ user }: { user: UserMetadata }) {
                               >
                                 Settings
                               </Menu.Item>
-                              <Menu.Item
-                                as="button"
-                                className="block rounded-md px-3 py-2 text-base font-medium text-gray-400  hover:text-gray-700 hover:bg-white w-full text-left"
-                                onClick={handleLogout}
-                              >
-                                Logout
-                              </Menu.Item>
+                              <form action={signOut}>
+                                <Menu.Item
+                                  as="button"
+                                  type="submit"
+                                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-400  hover:text-gray-700 hover:bg-white w-full text-left"
+                                >
+                                  Logout
+                                </Menu.Item>
+                              </form>
                             </>
                           )}
                         </Menu.Items>
@@ -189,13 +189,15 @@ export default function Header({ user }: { user: UserMetadata }) {
                   >
                     Settings
                   </Disclosure.Button>
-                  <Disclosure.Button
-                    onClick={handleLogout}
-                    type="button"
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                  >
-                    Logout
-                  </Disclosure.Button>
+
+                  <form action={signOut}>
+                    <Disclosure.Button
+                      type="button"
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    >
+                      Logout
+                    </Disclosure.Button>
+                  </form>
                 </div>
               </div>
             </Disclosure.Panel>

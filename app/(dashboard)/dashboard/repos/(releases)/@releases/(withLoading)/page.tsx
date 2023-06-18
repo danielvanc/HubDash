@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getLatestReleases } from "@/lib/auth/github";
+import { delay } from "@/lib/delay";
 
 // export const revalidate = 0;
 
