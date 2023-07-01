@@ -16,7 +16,7 @@ export default async function RootLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session) redirect(CONFIG.LOGGED_IN);
+  if (session) return redirect(CONFIG.LOGGED_IN);
 
   return (
     <html lang="en">
