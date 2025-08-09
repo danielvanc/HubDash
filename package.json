@@ -1,6 +1,9 @@
 {
   "name": "hub-dash",
   "description": "Keep up with all your GitHub notifications, with ease, in one place.",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "author": {
     "name": "Daniel Van Cuylenburg",
     "email": "email@danielvanc.com"
