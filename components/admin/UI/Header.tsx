@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { UserMetadata } from "@supabase/gotrue-js";
+import { UserMetadata } from "@supabase/supabase-js";
 import { classNames } from "lib/utils";
 import navigation from "navData/primary";
 

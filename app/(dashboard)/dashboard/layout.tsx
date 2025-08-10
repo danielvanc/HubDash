@@ -1,7 +1,7 @@
 import "server-only";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { UserMetadata } from "@supabase/gotrue-js";
+import { UserMetadata } from "@supabase/supabase-js";
 import {
   createServerActionClient,
   createServerComponentClient,
